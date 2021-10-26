@@ -4,3 +4,12 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<p>@ViewData["accessToken"]</p>
+@foreach (var claim in User.Claims)
+{
+    <p>Claim</p>
+    <p>ClaimType:@claim.Type</p>
+    <p>ClaimValue:@claim.Value</p>
+
+}
