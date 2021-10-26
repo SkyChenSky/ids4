@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using IdentityServer4.Services;
 using IdentityServer4.Test;
 using IdentityServer4;
+using IdentityServer4.Events;
+using IdentityServer4.Stores;
 using Sikiro.Ids4.Filer;
 using Sikiro.Ids4.Models;
 
@@ -17,11 +19,25 @@ namespace Sikiro.Ids4.Controllers
     {
         private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly IClientStore _clientStore;
+        private readonly IAuthenticationSchemeProvider _schemeProvider;
+        private readonly IEventService _events;
 
-        public AccountController(IIdentityServerInteractionService interaction)
+        public AccountController(
+            IIdentityServerInteractionService interaction,
+            IClientStore clientStore,
+            IAuthenticationSchemeProvider schemeProvider,
+            IEventService events,
+            TestUserStore users = null)
         {
-            _users = new TestUserStore(Config.GetTestUsers());
+            // if the TestUserStore is not in DI, then we'll just use the global users collection
+            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
+            _users = users ?? new TestUserStore(Config.GetTestUsers());
+
             _interaction = interaction;
+            _clientStore = clientStore;
+            _schemeProvider = schemeProvider;
+            _events = events;
         }
 
         [HttpGet]
@@ -43,29 +59,49 @@ namespace Sikiro.Ids4.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Handle postback from username/password login
+        /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Login(LoginInputModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
-            if (_users.FindByUsername(model.Username) == null ||
-                !_users.ValidateCredentials(model.Username, model.Password))
+            // check if we are in the context of an authorization request
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+
+            // validate username/password against in-memory store
+            if (_users.ValidateCredentials(model.Username, model.Password))
             {
-                model.ErrorMessage = "登录验证不通过";
-                return View(model);
+                var user = _users.FindByUsername(model.Username);
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
+
+                //使用IdentityServer的SignInAsync登录
+                await HttpContext.SignInAsync(new IdentityServerUser(user.SubjectId) { DisplayName = user.Username }, new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddDays(7),
+                    IsPersistent = true,
+                    AllowRefresh = true
+                });
+
+                // request for a local page
+                if (Url.IsLocalUrl(model.ReturnUrl))
+                {
+                    return Redirect(model.ReturnUrl);
+                }
+                else if (string.IsNullOrEmpty(model.ReturnUrl))
+                {
+                    return Redirect("~/");
+                }
+                else
+                {
+                    // user might have clicked on a malicious link - should be logged
+                    throw new Exception("invalid return URL");
+                }
             }
 
-            //使用IdentityServer的SignInAsync登录
-            await HttpContext.SignInAsync(new IdentityServerUser(model.Username), new AuthenticationProperties
-            {
-                ExpiresUtc = DateTime.UtcNow.AddDays(7),
-                IsPersistent = true,
-                AllowRefresh = true
-            });
+            model.ErrorMessage = "账号不匹配";
 
-            //验证ReturnUrl是否可以使用
-            if (_interaction.IsValidReturnUrl(model.ReturnUrl))
-                return Redirect(model.ReturnUrl);
-
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
     }
 }

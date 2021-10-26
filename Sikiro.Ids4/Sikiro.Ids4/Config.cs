@@ -61,11 +61,10 @@ namespace Sikiro.Ids4
                 {
                     ClientId = "web",
                     ClientName = "web_client",
-                    ClientSecrets = {new Secret("159B5013-584E-4C2B-B5E1-9D9E2233AF6F".Sha256())},
                     AllowedGrantTypes = GrantTypes.Implicit,
                    // RequireConsent = false,//设置是否要授权页面
-                    RedirectUris = { "http://www.clienta.com:5001/signin-oidc"},
-                    PostLogoutRedirectUris = {"http://www.clienta.com:5001/signout-callback-oidc"},
+                    RedirectUris = { "http://localhost:5001/signin-oidc"},
+                    PostLogoutRedirectUris = {"http://localhost:5001/signout-callback-oidc"},
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

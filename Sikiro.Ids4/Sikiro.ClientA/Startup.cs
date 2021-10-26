@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using Sikiro.ClientA.Extendsions;
 
 namespace Sikiro.ClientA
 {
@@ -22,6 +23,8 @@ namespace Sikiro.ClientA
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = "Cookies";
@@ -30,13 +33,14 @@ namespace Sikiro.ClientA
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "http://www.ids4.com:5000";
+                    options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
                     options.ClientId = "web";
-                    options.ClientSecret = "159B5013-584E-4C2B-B5E1-9D9E2233AF6F";
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
                 });
 
-            services.AddControllersWithViews();
+            services.ConfigureNonBreakingSameSiteCookies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,15 +59,7 @@ namespace Sikiro.ClientA
 
             app.UseRouting();
 
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                ConsentCookie = new CookieBuilder
-                {
-                    Path = "/",
-                    SameSite = SameSiteMode.Lax
-                }
-            });
-
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 

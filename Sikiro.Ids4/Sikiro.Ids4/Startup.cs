@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sikiro.Ids4.Extendsions;
 
 namespace Sikiro.Ids4
 {
@@ -20,6 +21,8 @@ namespace Sikiro.Ids4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddInMemoryApiResources(Config.GetApiResource())
@@ -27,7 +30,7 @@ namespace Sikiro.Ids4
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddTestUsers(Config.GetTestUsers());
 
-            services.AddControllersWithViews();
+            services.ConfigureNonBreakingSameSiteCookies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,18 +49,10 @@ namespace Sikiro.Ids4
 
             app.UseRouting();
 
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                ConsentCookie = new CookieBuilder
-                {
-                    Path = "/",
-                    SameSite = SameSiteMode.Lax
-                }
-            });
-
             app.UseIdentityServer();
-
-            //app.UseAuthorization();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
