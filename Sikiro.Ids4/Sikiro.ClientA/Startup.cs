@@ -1,13 +1,9 @@
-using IdentityServer4;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Http;
-using Sikiro.ClientA.Extendsions;
 
 namespace Sikiro.ClientA
 {
@@ -20,10 +16,11 @@ namespace Sikiro.ClientA
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddAuthentication(options =>
                 {
@@ -33,17 +30,13 @@ namespace Sikiro.ClientA
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "http://localhost:5000";
+                    options.Authority = "http://www.ids4.com:5000";
                     options.RequireHttpsMetadata = false;
                     options.ClientId = "web";
                     options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
                 });
-
-            services.ConfigureNonBreakingSameSiteCookies();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -59,7 +52,6 @@ namespace Sikiro.ClientA
 
             app.UseRouting();
 
-            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 

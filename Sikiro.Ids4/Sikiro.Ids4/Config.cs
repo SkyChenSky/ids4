@@ -32,7 +32,7 @@ namespace Sikiro.Ids4
                 new TestUser
                 {
                     SubjectId = "1",
-                    Username = "123",
+                    Username = "chengong",
                     Password = "123456",
                     Claims = new[]
                     {
@@ -48,7 +48,6 @@ namespace Sikiro.Ids4
                     {
                         new Claim(ClaimTypes.Role, "普通用户")
                     }
-
                 }
             };
         }
@@ -63,8 +62,8 @@ namespace Sikiro.Ids4
                     ClientName = "web_client",
                     AllowedGrantTypes = GrantTypes.Implicit,
                    // RequireConsent = false,//设置是否要授权页面
-                    RedirectUris = { "http://localhost:5001/signin-oidc"},
-                    PostLogoutRedirectUris = {"http://localhost:5001/signout-callback-oidc"},
+                    RedirectUris = { "http://www.clienta.com:5001/signin-oidc","http://www.clientb.com:5002/signin-oidc"},
+                    PostLogoutRedirectUris = {"http://www.clienta.com:5001/signout-callback-oidc","http://www.clientb.com:5002/signout-callback-oidc"},
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

@@ -30,7 +30,6 @@ namespace Sikiro.Ids4
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddTestUsers(Config.GetTestUsers());
 
-            services.ConfigureNonBreakingSameSiteCookies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +49,6 @@ namespace Sikiro.Ids4
             app.UseRouting();
 
             app.UseIdentityServer();
-            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Sikiro.Ids4.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
