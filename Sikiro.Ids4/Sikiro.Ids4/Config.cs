@@ -8,13 +8,14 @@ namespace Sikiro.Ids4
 {
     public static class Config
     {
-        public static IEnumerable<ApiResource> GetApiResource()
+        public static IEnumerable<ApiScope> GetApiScopes()
         {
-            return new List<ApiResource>
+            return new List<ApiScope>
             {
-                new ApiResource("api", "api",new List<string>{ClaimTypes.Role })
+                new ApiScope("api1", "My API")
             };
         }
+
 
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
@@ -56,6 +57,13 @@ namespace Sikiro.Ids4
         {
             return new List<Client>
             {
+                new Client
+                {
+                    ClientId = "api",
+                    ClientSecrets = { new Secret("41A5D329-C55C-4118-AA78-CAE4C09D441D".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = { "api1" }
+                },
                 new Client
                 {
                     ClientId = "mvc",

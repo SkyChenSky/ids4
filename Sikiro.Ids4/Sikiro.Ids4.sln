@@ -5,9 +5,17 @@ VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sikiro.Ids4", "Sikiro.Ids4\Sikiro.Ids4.csproj", "{AEDE3213-6FF1-4B86-AF17-E97E9F6346AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sikiro.ClientA", "Sikiro.ClientA\Sikiro.ClientA.csproj", "{3E37E2DD-34FB-407F-BA6B-4C8BC26316E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sikiro.ClientA", "Sikiro.ClientA\Sikiro.ClientA.csproj", "{3E37E2DD-34FB-407F-BA6B-4C8BC26316E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sikiro.ClientB", "Sikiro.ClientB\Sikiro.ClientB.csproj", "{7C1F9240-B296-4661-B47A-98DAAAE5D3F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sikiro.ClientB", "Sikiro.ClientB\Sikiro.ClientB.csproj", "{7C1F9240-B296-4661-B47A-98DAAAE5D3F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVC-SSO", "MVC-SSO", "{FE4B43CA-3F6C-4320-B1CD-BF929BA9EB7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API-Identity", "API-Identity", "{3550606D-D8F9-44C8-B23F-574905B12495}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sikiro.APIA", "Sikiro.APIA\Sikiro.APIA.csproj", "{A117CEBB-7DEF-4097-B31E-A018F1E3CAA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sikiro.ApiClient", "Sikiro.ApiClient\Sikiro.ApiClient.csproj", "{DE8F0916-897A-40E4-A8AE-3F6ED63ED157}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +35,23 @@ Global
 		{7C1F9240-B296-4661-B47A-98DAAAE5D3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C1F9240-B296-4661-B47A-98DAAAE5D3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C1F9240-B296-4661-B47A-98DAAAE5D3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A117CEBB-7DEF-4097-B31E-A018F1E3CAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A117CEBB-7DEF-4097-B31E-A018F1E3CAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A117CEBB-7DEF-4097-B31E-A018F1E3CAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A117CEBB-7DEF-4097-B31E-A018F1E3CAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE8F0916-897A-40E4-A8AE-3F6ED63ED157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE8F0916-897A-40E4-A8AE-3F6ED63ED157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE8F0916-897A-40E4-A8AE-3F6ED63ED157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE8F0916-897A-40E4-A8AE-3F6ED63ED157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3E37E2DD-34FB-407F-BA6B-4C8BC26316E6} = {FE4B43CA-3F6C-4320-B1CD-BF929BA9EB7B}
+		{7C1F9240-B296-4661-B47A-98DAAAE5D3F0} = {FE4B43CA-3F6C-4320-B1CD-BF929BA9EB7B}
+		{A117CEBB-7DEF-4097-B31E-A018F1E3CAA9} = {3550606D-D8F9-44C8-B23F-574905B12495}
+		{DE8F0916-897A-40E4-A8AE-3F6ED63ED157} = {3550606D-D8F9-44C8-B23F-574905B12495}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {521C158D-A348-4840-AF7F-141625901503}
