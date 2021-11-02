@@ -24,12 +24,14 @@ namespace Sikiro.ApiClient
             }
 
             // request token
-            var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            var tokenResponse = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
             {
                 Address = disco.TokenEndpoint,
                 ClientId = "api",
                 ClientSecret = "41A5D329-C55C-4118-AA78-CAE4C09D441D",
-                Scope = "api1"
+                Scope = "api1",
+                UserName = "chengong",
+                Password = "1234567"
             });
 
             if (tokenResponse.IsError)

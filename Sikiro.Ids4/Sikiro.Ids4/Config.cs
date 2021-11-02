@@ -61,7 +61,7 @@ namespace Sikiro.Ids4
                 {
                     ClientId = "api",
                     ClientSecrets = { new Secret("41A5D329-C55C-4118-AA78-CAE4C09D441D".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     AllowedScopes = { "api1" }
                 },
                 new Client
