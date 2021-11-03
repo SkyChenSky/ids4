@@ -31,7 +31,7 @@ namespace Sikiro.ApiClient
                 ClientSecret = "41A5D329-C55C-4118-AA78-CAE4C09D441D",
                 Scope = "api1",
                 UserName = "chengong",
-                Password = "1234567"
+                Password = "123456"
             });
 
             if (tokenResponse.IsError)
@@ -47,7 +47,7 @@ namespace Sikiro.ApiClient
             var apiClient = new HttpClient();
             apiClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = await apiClient.GetAsync("http://localhost:5003/WeatherForecast");
+            var response = await apiClient.GetAsync("http://localhost:5003/Identity");
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);

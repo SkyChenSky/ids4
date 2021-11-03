@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sikiro.Ids4.Extendsions;
+using Sikiro.Ids4.Services;
 
 namespace Sikiro.Ids4
 {
@@ -31,6 +32,8 @@ namespace Sikiro.Ids4
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                 .AddProfileService<ProfileService>();
 
+            //业务服务
+            services.AddScoped<UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
