@@ -31,6 +31,7 @@ namespace Sikiro.Ids4
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                 .AddProfileService<ProfileService>();
+                
 
             //业务服务
             services.AddScoped<UserService>();

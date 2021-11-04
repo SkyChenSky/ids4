@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -9,24 +11,24 @@ using IdentityServer4.Test;
 using IdentityServer4;
 using IdentityServer4.Events;
 using Sikiro.Ids4.Models;
+using Sikiro.Ids4.Services;
 
 namespace Sikiro.Ids4.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
+        private readonly UserService _userService;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
-            IEventService events,
-            TestUserStore users = null)
+            IEventService events, UserService userService)
         {
-            _users = users ?? new TestUserStore(Config.GetTestUsers());
             _interaction = interaction;
             _events = events;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -51,15 +53,20 @@ namespace Sikiro.Ids4.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
-            if (_users.ValidateCredentials(model.Username, model.Password))
+            var user = _userService.GetUser(model.Username, model.Password);
+            if (user != null)
             {
-                var user = _users.FindByUsername(model.Username);
-
                 var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.UserId, user.UserName, clientId: context?.Client.ClientId));
 
                 //使用IdentityServer的SignInAsync登录
-                await HttpContext.SignInAsync(new IdentityServerUser(user.SubjectId) { DisplayName = user.Username }, new AuthenticationProperties
+                await HttpContext.SignInAsync(new IdentityServerUser(user.UserId) { DisplayName = user.UserName,AdditionalClaims = new List<Claim>
+                {
+                    new Claim("UserId", user.UserId),
+                    new Claim("UserName", user.UserName),
+                    new Claim("PhoneNumber", user.Phone)
+                }
+                }, new AuthenticationProperties
                 {
                     ExpiresUtc = DateTime.UtcNow.AddDays(7),
                     IsPersistent = true,
@@ -87,7 +94,7 @@ namespace Sikiro.Ids4.Controllers
             if (HttpContext.User.Identity != null && HttpContext.User.Identity.IsAuthenticated)
                 await HttpContext.SignOutAsync();
 
-            if(logout.PostLogoutRedirectUri != null)
+            if (logout.PostLogoutRedirectUri != null)
                 return Redirect(logout.PostLogoutRedirectUri);
 
             return RedirectToAction("Index", "Home");

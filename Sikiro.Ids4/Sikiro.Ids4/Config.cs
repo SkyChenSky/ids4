@@ -60,24 +60,30 @@ namespace Sikiro.Ids4
                 new Client
                 {
                     ClientId = "api",
-                    ClientSecrets = { new Secret("41A5D329-C55C-4118-AA78-CAE4C09D441D".Sha256()) },
+                    ClientSecrets = {new Secret("41A5D329-C55C-4118-AA78-CAE4C09D441D".Sha256())},
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = {"api1"}
                 },
                 new Client
                 {
                     ClientId = "mvc",
                     ClientName = "mvc_name",
-                    ClientSecrets = { new Secret("010FD3E9-199A-4728-99C7-1C3895CEFA2B".Sha256()) },
+                    ClientSecrets = {new Secret("010FD3E9-199A-4728-99C7-1C3895CEFA2B".Sha256())},
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = { "http://www.clienta.com:5001/signin-oidc","http://www.clientb.com:5002/signin-oidc"},
-                    PostLogoutRedirectUris = {"http://www.clienta.com:5001/signout-callback-oidc","http://www.clientb.com:5002/signout-callback-oidc"},
+                    RedirectUris =
+                        {"http://www.clienta.com:5001/signin-oidc", "http://www.clientb.com:5002/signin-oidc"},
+                    PostLogoutRedirectUris =
+                    {
+                        "http://www.clienta.com:5001/signout-callback-oidc",
+                        "http://www.clientb.com:5002/signout-callback-oidc"
+                    },
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                     },
-                    AllowOfflineAccess=true
+                    AllowOfflineAccess = true,
+                    AlwaysIncludeUserClaimsInIdToken = true
                 }
             };
         }

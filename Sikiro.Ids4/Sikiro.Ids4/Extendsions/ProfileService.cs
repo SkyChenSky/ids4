@@ -11,7 +11,6 @@ namespace Sikiro.Ids4.Extendsions
     {
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            context.AddRequestedClaims(context.Subject.Claims);
             var claims = context.Subject.Claims.ToList();
             context.IssuedClaims.AddRange(claims.ToList());
 
